@@ -1,7 +1,7 @@
 export interface User {
   id: number
   name: string;
-  check: number;
+  userCheck: number;
   message: string;
   status: string;
 }

@@ -13,7 +13,7 @@ export const PlayersInfoBlock: FC = () => {
       {players.map(item =>
         <PlayerInfo
           name={item.name}
-          check={item.check}
+          check={item.userCheck}
           status={item.status}
           key={item.id}
         />

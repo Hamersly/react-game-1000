@@ -11,4 +11,4 @@ export const getPlayers = createSelector(allParams, (state: RootState) => state.
 
 export const getWhoseThrow = (state: RootState) => gameParams(state).whoseThrow
 
-export const getCounter = (state: RootState) => gameParams(state).counter
+export const getDiceCheck = (state: RootState) => gameParams(state).diceCheck
