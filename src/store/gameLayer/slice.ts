@@ -3,7 +3,7 @@ import {User} from "../../types/types";
 
 interface GameState {
   users: User[];
-  counter: number;
+  diceCheck: number;
   dicesMeanings?: number[];
   whoseThrow: number | null
 }
@@ -13,19 +13,19 @@ const initialState = {
     {
       id: 0,
       name: 'Человек',
-      check: 0,
+      userCheck: 0,
       message: '',
-      status: '',
+      status: 0,
     },
     {
       id: 1,
       name: 'Робот',
-      check: 0,
+      userCheck: 0,
       message: '',
-      status: '',
+      status: 0,
     },
   ],
-  counter: 0,
+  diceCheck: 0,
   dicesMeanings: [],
   whoseThrow: null
 } as GameState
@@ -34,8 +34,8 @@ const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    addCounter(state, action: PayloadAction<number>) {
-      state.counter += action.payload
+    addDiceCheck(state, action: PayloadAction<number>) {
+      state.diceCheck += action.payload
     },
     addDicesMeanings(state, action: PayloadAction<number[]>) {
       state.dicesMeanings = action.payload
@@ -43,6 +43,6 @@ const gameSlice = createSlice({
   }
 })
 
-export const {addCounter, addDicesMeanings} = gameSlice.actions
+export const {addDiceCheck, addDicesMeanings} = gameSlice.actions
 
 export default gameSlice.reducer;
