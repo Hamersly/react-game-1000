@@ -18,12 +18,6 @@ export const PlayersInfoBlock: FC = () => {
           key={item.id}
         />
       )}
-
-      {/*<PlayerInfo*/}
-      {/*  name={'Робот'}*/}
-      {/*  check={555}*/}
-      {/*  status={'Самосвал!'}*/}
-      {/*/>*/}
     </PlayersInfoBlockDiv>
   );
 };

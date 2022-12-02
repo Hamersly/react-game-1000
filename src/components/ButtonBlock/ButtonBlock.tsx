@@ -15,16 +15,35 @@ export const ButtonBlock: FC = () => {
       meanings.push(meaning)
     }
     console.log(meanings)
-
     return meanings
   }
 
-  const countingDiceCheck = (numbers: number[] = []): number => {
-    if (numbers) {
+  const countingDiceCheck = (meanings: number[] = []): number => {
+    if (meanings) {
       let counter: number = 0
       const countItems: any = {}
       for (let i = 1; i < 7; i++) {
-        countItems[i] = numbers.filter(number => number === i).length
+        countItems[i] = meanings.filter(meaning => meaning === i).length
+      }
+
+      if (
+        countItems[1] === 1 &&
+        countItems[2] === 1 &&
+        countItems[3] === 1 &&
+        countItems[4] === 1 &&
+        countItems[5] === 1
+      ) {
+        counter += 125
+        return counter
+      } else if (
+        countItems[2] === 1 &&
+        countItems[3] === 1 &&
+        countItems[4] === 1 &&
+        countItems[5] === 1 &&
+        countItems[6] === 1
+      ) {
+        counter += 250
+        return counter
       }
 
       for (const key in countItems) {
@@ -44,7 +63,6 @@ export const ButtonBlock: FC = () => {
           if (countItems[key] === 3) counter += Number(key) * 10
           else if (countItems[key] === 4) counter += Number(key) * 20
           else if (countItems[key] === 5) counter += Number(key) * 100
-          // else if() counter += 125
         }
       }
 

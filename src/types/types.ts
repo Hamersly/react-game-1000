@@ -3,5 +3,5 @@ export interface User {
   name: string;
   userCheck: number;
   message: string;
-  status: string;
+  status: number;
 }
