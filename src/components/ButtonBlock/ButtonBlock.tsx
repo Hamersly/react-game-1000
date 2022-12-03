@@ -1,15 +1,18 @@
 import {FC, MouseEvent} from "react";
 import {ButtonBlockDiv, PassButton, PlayButton} from "./ButtonBlock.styled";
-import {useAppDispatch} from "../../store/hooks";
-import {addDiceCheck, addDicesMeanings} from "../../store/gameLayer/slice";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import {addDiceCheck, addDicesMeanings, addUserCheck, diceCheckZero} from "../../store/gameLayer/slice";
+import {getDiceCheck} from "../../store/gameLayer/selectors";
 
 export const ButtonBlock: FC = () => {
+  const diceCheckStore: number = useAppSelector(getDiceCheck)
   const dispatch = useAppDispatch();
 
   const generateDicesMeanings = (): number[] => {
     const meanings = []
     const min = Math.ceil(1);
     const max = Math.floor(7);
+
     for (let i = 0; i < 5; i++) {
       const meaning = Math.floor(Math.random() * (max - min)) + min
       meanings.push(meaning)
@@ -19,9 +22,11 @@ export const ButtonBlock: FC = () => {
   }
 
   const countingDiceCheck = (meanings: number[] = []): number => {
+
     if (meanings) {
       let counter: number = 0
       const countItems: any = {}
+
       for (let i = 1; i < 7; i++) {
         countItems[i] = meanings.filter(meaning => meaning === i).length
       }
@@ -72,18 +77,24 @@ export const ButtonBlock: FC = () => {
     } else return 0
   }
 
-  const handleClick = (event: MouseEvent<HTMLElement>) => {
+  const handleClickPlay = (event: MouseEvent<HTMLElement>) => {
     const meanings = generateDicesMeanings()
     dispatch(addDicesMeanings(meanings))
 
     const diceCheck = countingDiceCheck(meanings)
-    dispatch(addDiceCheck(diceCheck))
+    if (diceCheck > 0) dispatch(addDiceCheck(diceCheck))
+    else dispatch(diceCheckZero())
+  }
+
+  const handleClickPass = (event: MouseEvent<HTMLElement>) => {
+    dispatch(addUserCheck(diceCheckStore))
+    dispatch(diceCheckZero())
   }
 
   return (
     <ButtonBlockDiv>
-      <PlayButton onClick={handleClick}>Играть</PlayButton>
-      <PassButton>Пас</PassButton>
+      <PlayButton onClick={handleClickPlay}>Играть</PlayButton>
+      <PassButton onClick={handleClickPass}>Пас</PassButton>
     </ButtonBlockDiv>
   );
 };

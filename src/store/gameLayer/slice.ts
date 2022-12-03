@@ -39,10 +39,16 @@ const gameSlice = createSlice({
     },
     addDicesMeanings(state, action: PayloadAction<number[]>) {
       state.dicesMeanings = action.payload
+    },
+    diceCheckZero(state) {
+      state.diceCheck = 0
+    },
+    addUserCheck(state, action:PayloadAction<any>) {
+      state.users[0].userCheck += action.payload
     }
   }
 })
 
-export const {addDiceCheck, addDicesMeanings} = gameSlice.actions
+export const {addDiceCheck, addDicesMeanings, diceCheckZero, addUserCheck} = gameSlice.actions
 
 export default gameSlice.reducer;
