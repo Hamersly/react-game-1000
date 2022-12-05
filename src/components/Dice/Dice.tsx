@@ -7,11 +7,11 @@ import dice_5 from '../../assets/5.png';
 import dice_6 from '../../assets/6.png';
 import {DiceImage} from "./Dice.styled";
 
-interface Props {
+interface IDiceProps {
   diceNumber: number
 }
 
-export const Dice: FC<Props> = ({diceNumber}) => {
+export const Dice: FC<IDiceProps> = ({diceNumber}) => {
   const list = [dice_1, dice_2, dice_3, dice_4, dice_5, dice_6]
 
   return (

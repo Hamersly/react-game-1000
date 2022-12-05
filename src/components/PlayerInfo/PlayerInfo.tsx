@@ -1,13 +1,13 @@
 import {FC} from "react";
 import {PlayerInfoDiv, PlayerInfoText} from "./PlayerInfo.styled";
 
-interface Props {
+interface IPlayerInfoProps {
   name: string;
   check: number;
   status: number;
 }
 
-export const PlayerInfo: FC<Props> = ({name, check, status}) => {
+export const PlayerInfo: FC<IPlayerInfoProps> = ({name, check, status}) => {
 
   return (
     <PlayerInfoDiv>

@@ -3,10 +3,10 @@ import {FC} from "react";
 import {PlayerInfo} from "../PlayerInfo/PlayerInfo";
 import {useSelector} from "react-redux";
 import {getPlayers} from "../../store/gameLayer/selectors";
-import {User} from "../../types/types";
+import {IUser} from "../../types/types";
 
 export const PlayersInfoBlock: FC = () => {
-  const players: User[] = useSelector(getPlayers)
+  const players: IUser[] = useSelector(getPlayers)
 
   return (
     <PlayersInfoBlockDiv>

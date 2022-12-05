@@ -1,8 +1,8 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {User} from "../../types/types";
+import {IUser} from "../../types/types";
 
-interface GameState {
-  users: User[];
+interface IGameState {
+  users: IUser[];
   diceCheck: number;
   dicesMeanings?: number[];
   whoseThrow: number | null
@@ -28,7 +28,7 @@ const initialState = {
   diceCheck: 0,
   dicesMeanings: [],
   whoseThrow: null
-} as GameState
+} as IGameState
 
 const gameSlice = createSlice({
   name: 'game',
