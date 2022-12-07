@@ -5,6 +5,7 @@ interface IGameState {
   users: IUser[];
   diceCheck: number;
   dicesMeanings?: number[];
+  dicesAmount: number;
   whoseThrow: number | null
 }
 
@@ -27,6 +28,7 @@ const initialState = {
   ],
   diceCheck: 0,
   dicesMeanings: [],
+  dicesAmount: 5,
   whoseThrow: null
 } as IGameState
 
@@ -43,12 +45,25 @@ const gameSlice = createSlice({
     diceCheckZero(state) {
       state.diceCheck = 0
     },
-    addUserCheck(state, action:PayloadAction<any>) {
+    addUserCheck(state, action: PayloadAction<any>) {
       state.users[0].userCheck += action.payload
+    },
+    addDicesAmount(state, action: PayloadAction<number>) {
+      state.dicesAmount = action.payload
+    },
+    addUserStatus(state, action: PayloadAction<number>) {
+      state.users[0].status += action.payload
     }
   }
 })
 
-export const {addDiceCheck, addDicesMeanings, diceCheckZero, addUserCheck} = gameSlice.actions
+export const {
+  addDiceCheck,
+  addDicesMeanings,
+  diceCheckZero,
+  addUserCheck,
+  addDicesAmount,
+  addUserStatus
+} = gameSlice.actions
 
 export default gameSlice.reducer;

@@ -5,3 +5,7 @@ export interface IUser {
   message: string;
   status: number;
 }
+
+export interface IcountItems {
+  [index: number]: number;
+}

@@ -1,26 +1,51 @@
-import {FC, MouseEvent} from "react";
+import {FC, MouseEvent, useEffect} from "react";
 import {ButtonBlockDiv, PassButton, PlayButton} from "./ButtonBlock.styled";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {addDiceCheck, addDicesMeanings, addUserCheck, diceCheckZero} from "../../store/gameLayer/slice";
-import {getDiceCheck} from "../../store/gameLayer/selectors";
-import {countingDiceCheck, generateDicesMeanings} from "../../helpers/helpers";
+import {
+  addDiceCheck,
+  addDicesAmount,
+  addDicesMeanings,
+  addUserCheck,
+  addUserStatus,
+  diceCheckZero
+} from "../../store/gameLayer/slice";
+import {getDiceCheck, getDicesAmount, getUserStatus} from "../../store/gameLayer/selectors";
+import {countingDiceCheck, filterDicesAmount, generateDicesMeanings, parseDiceCheck} from "../../helpers/helpers";
 
 export const ButtonBlock: FC = () => {
   const diceCheckStore: number = useAppSelector(getDiceCheck)
+  const dicesAmount: number = useAppSelector(getDicesAmount)
+  const userStatus: number = useAppSelector(getUserStatus)
   const dispatch = useAppDispatch();
 
-  const handleClickPlay = (event: MouseEvent<HTMLElement>) => {
-    const meanings = generateDicesMeanings()
-    dispatch(addDicesMeanings(meanings))
+  useEffect(() => {
+    if (userStatus === 3) {
+      dispatch(addUserCheck(-50))
+      dispatch(addUserStatus(-3))
+    }
+  })
 
-    const diceCheck = countingDiceCheck(meanings)
-    if (diceCheck > 0) dispatch(addDiceCheck(diceCheck))
-    else dispatch(diceCheckZero())
+  const handleClickPlay = (event: MouseEvent<HTMLElement>) => {
+    const meanings = generateDicesMeanings(dicesAmount)
+    dispatch(addDicesMeanings(meanings))
+    const parse = parseDiceCheck(meanings)
+    const diceCheck = countingDiceCheck(parse)
+
+    if (diceCheck > 0) {
+      dispatch(addDiceCheck(diceCheck))
+    } else {
+      dispatch(diceCheckZero())
+      dispatch(addUserStatus(1))
+    }
+
+    const amount = filterDicesAmount(meanings, parse)
+    dispatch(addDicesAmount(amount))
   }
 
   const handleClickPass = (event: MouseEvent<HTMLElement>) => {
     dispatch(addUserCheck(diceCheckStore))
     dispatch(diceCheckZero())
+    dispatch(addDicesAmount(5))
   }
 
   return (

@@ -1,9 +1,12 @@
-export const generateDicesMeanings = (): number[] => {
-  const meanings = []
+import {IcountItems} from "../types/types";
+
+export const generateDicesMeanings = (dicesAmount: number): number[] => {
+  //Генерируем массив с пятью элементами типа number в количестве 5 штук
+  const meanings: number[] = []
   const min = Math.ceil(1);
   const max = Math.floor(7);
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < dicesAmount; i++) {
     const meaning = Math.floor(Math.random() * (max - min)) + min
     meanings.push(meaning)
   }
@@ -11,15 +14,22 @@ export const generateDicesMeanings = (): number[] => {
   return meanings
 }
 
-
-export const countingDiceCheck = (meanings: number[] = []): number => {
-  //TODO: рефачить по возможности
-  let counter: number = 0
-  const countItems: any = {}
+export const parseDiceCheck = (meanings: number[] = []): IcountItems => {
+  //Узнаём, сколько раз каждое возможное число выпало на кубиках
+  const countItems: IcountItems = {}
 
   for (let i = 1; i < 7; i++) {
     countItems[i] = meanings.filter(meaning => meaning === i).length
   }
+
+  console.log(countItems)
+  return countItems
+}
+
+export const countingDiceCheck = (countItems: IcountItems): number => {
+  //TODO: рефачить по возможности
+
+  let counter: number = 0
 
   if (
     countItems[1] === 1 &&
@@ -41,7 +51,7 @@ export const countingDiceCheck = (meanings: number[] = []): number => {
     return counter
   }
 
-  for (const key in countItems) {
+  for (let key in countItems) {
     if (key === '1') {
       if (countItems[key] === 1) counter += 10
       else if (countItems[key] === 2) counter += 20
@@ -63,4 +73,20 @@ export const countingDiceCheck = (meanings: number[] = []): number => {
 
   console.log(counter)
   return counter
+}
+
+export const filterDicesAmount = (meanings: number[], countItems: IcountItems): number => {
+  //Уменьшаем количество кубиков на количество учитываемых при игре значений
+  let amount: number = meanings.length
+  const firstAmount: number = amount
+  for (let key in countItems) {
+    if (key === '1' || key === '5') amount -= countItems[key]
+    else if (countItems[key] >= 3) amount -= countItems[key]
+  }
+
+  if (amount === 0 || amount === firstAmount) amount = 5
+
+  console.log(amount)
+  return amount
+
 }
