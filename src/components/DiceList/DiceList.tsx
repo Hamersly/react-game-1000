@@ -10,8 +10,8 @@ export const DiceList: FC = () => {
 
   return (
     <DiceListDiv>
-      {meanings ? meanings.map(item =>
-        <Dice diceNumber={item}/>
+      {meanings ? meanings.map((item, key) =>
+        <Dice key={key} diceNumber={item}/>
       ) : <></>}
     </DiceListDiv>
   );

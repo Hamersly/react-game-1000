@@ -10,7 +10,7 @@ export const generateDicesMeanings = (dicesAmount: number): number[] => {
     const meaning = Math.floor(Math.random() * (max - min)) + min
     meanings.push(meaning)
   }
-  console.log(meanings)
+
   return meanings
 }
 
@@ -22,7 +22,6 @@ export const parseDiceCheck = (meanings: number[] = []): IcountItems => {
     countItems[i] = meanings.filter(meaning => meaning === i).length
   }
 
-  console.log(countItems)
   return countItems
 }
 
@@ -71,7 +70,6 @@ export const countingDiceCheck = (countItems: IcountItems): number => {
     }
   }
 
-  console.log(counter)
   return counter
 }
 
@@ -86,7 +84,6 @@ export const filterDicesAmount = (meanings: number[], countItems: IcountItems): 
 
   if (amount === 0 || amount === firstAmount) amount = 5
 
-  console.log(amount)
   return amount
 
 }

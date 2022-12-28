@@ -7,10 +7,12 @@ import {
   addDicesMeanings,
   addUserCheck,
   addUserStatus,
+  changeHumanThrow,
   diceCheckZero
 } from "../../store/gameLayer/slice";
 import {getDiceCheck, getDicesAmount, getUserStatus} from "../../store/gameLayer/selectors";
 import {countingDiceCheck, filterDicesAmount, generateDicesMeanings, parseDiceCheck} from "../../helpers/helpers";
+
 
 export const ButtonBlock: FC = () => {
   const diceCheckStore: number = useAppSelector(getDiceCheck)
@@ -36,6 +38,7 @@ export const ButtonBlock: FC = () => {
     } else {
       dispatch(diceCheckZero())
       dispatch(addUserStatus(1))
+      dispatch(changeHumanThrow())
     }
 
     const amount = filterDicesAmount(meanings, parse)

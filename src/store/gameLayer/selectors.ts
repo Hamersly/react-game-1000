@@ -9,7 +9,7 @@ export const getDicesMeanings = (state: RootState) => gameParams(state).dicesMea
 
 export const getPlayers = createSelector(allParams, (state: RootState) => state.game.users)
 
-export const getWhoseThrow = (state: RootState) => gameParams(state).whoseThrow
+export const getHumanThrow = (state: RootState) => gameParams(state).humanThrow
 
 export const getDiceCheck = (state: RootState) => gameParams(state).diceCheck
 
