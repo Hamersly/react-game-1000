@@ -4,13 +4,19 @@ import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {
   addDiceCheck,
   addDicesAmount,
-  addDicesMeanings,
+  addDicesMeanings, addRobotCheck, addRobotStatus,
   addUserCheck,
   addUserStatus,
   changeHumanThrow,
   diceCheckZero
 } from "../../store/gameLayer/slice";
-import {getDiceCheck, getDicesAmount, getUserStatus} from "../../store/gameLayer/selectors";
+import {
+  getDiceCheck,
+  getDicesAmount,
+  getHumanThrow,
+  getRobotStatus,
+  getUserStatus
+} from "../../store/gameLayer/selectors";
 import {countingDiceCheck, filterDicesAmount, generateDicesMeanings, parseDiceCheck} from "../../helpers/helpers";
 
 
@@ -18,16 +24,28 @@ export const ButtonBlock: FC = () => {
   const diceCheckStore: number = useAppSelector(getDiceCheck)
   const dicesAmount: number = useAppSelector(getDicesAmount)
   const userStatus: number = useAppSelector(getUserStatus)
+  const robotStatus: number = useAppSelector(getRobotStatus)
+  const humanThrow = useAppSelector(getHumanThrow)
+
   const dispatch = useAppDispatch();
+
 
   useEffect(() => {
     if (userStatus === 3) {
       dispatch(addUserCheck(-50))
       dispatch(addUserStatus(-3))
     }
+    if (robotStatus === 3) {
+      dispatch(addRobotCheck(-50))
+      dispatch(addRobotStatus(-3))
+    }
+    if (!humanThrow) {
+      robotThrow()
+    }
   })
 
-  const handleClickPlay = (event: MouseEvent<HTMLElement>) => {
+
+  const diceThrow = (player:boolean) => {
     const meanings = generateDicesMeanings(dicesAmount)
     dispatch(addDicesMeanings(meanings))
     const parse = parseDiceCheck(meanings)
@@ -35,9 +53,11 @@ export const ButtonBlock: FC = () => {
 
     if (diceCheck > 0) {
       dispatch(addDiceCheck(diceCheck))
+      console.log(diceCheck)
+      console.log(diceCheckStore)
     } else {
       dispatch(diceCheckZero())
-      dispatch(addUserStatus(1))
+      player ? dispatch(addUserStatus(1)) : dispatch(addRobotStatus(1))
       dispatch(changeHumanThrow())
     }
 
@@ -45,10 +65,32 @@ export const ButtonBlock: FC = () => {
     dispatch(addDicesAmount(amount))
   }
 
-  const handleClickPass = (event: MouseEvent<HTMLElement>) => {
-    dispatch(addUserCheck(diceCheckStore))
+
+  const pass = (player:boolean) => {
+    console.log(diceCheckStore)
+    player ? dispatch(addUserCheck(diceCheckStore)) : dispatch(addRobotCheck(diceCheckStore))
     dispatch(diceCheckZero())
     dispatch(addDicesAmount(5))
+    dispatch(changeHumanThrow())
+  }
+
+
+  const handleClickPlay = (event: MouseEvent<HTMLElement>) => {
+    diceThrow(humanThrow)
+  }
+
+  const handleClickPass = (event: MouseEvent<HTMLElement>) => {
+    pass(humanThrow)
+  }
+
+
+  const robotThrow = () => {
+    console.log('robot throw')
+    diceThrow(humanThrow)
+    console.log('robot throw')
+    console.log('robot pass')
+    pass(humanThrow)
+    console.log('robot pass')
   }
 
   return (

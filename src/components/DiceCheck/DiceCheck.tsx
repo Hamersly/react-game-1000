@@ -9,7 +9,7 @@ export const DiceCheck: FC = () => {
   return (
     <DiceCheckDiv>
       <DiceCheckSum>+{diceCheck}</DiceCheckSum>
-      <DiceCheckInfo>Доберись до 300!</DiceCheckInfo>
+      <DiceCheckInfo>Тут будет инфо. текст</DiceCheckInfo>
     </DiceCheckDiv>
   );
 };

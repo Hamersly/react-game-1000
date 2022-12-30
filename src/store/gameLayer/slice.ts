@@ -45,7 +45,7 @@ const gameSlice = createSlice({
     diceCheckZero(state) {
       state.diceCheck = 0
     },
-    addUserCheck(state, action: PayloadAction<any>) {
+    addUserCheck(state, action: PayloadAction<number>) {
       state.users[0].userCheck += action.payload
     },
     addDicesAmount(state, action: PayloadAction<number>) {
@@ -56,7 +56,13 @@ const gameSlice = createSlice({
     },
     changeHumanThrow(state) {
       state.humanThrow = !state.humanThrow
-    }
+    },
+    addRobotCheck(state, action: PayloadAction<number>) {
+      state.users[1].userCheck += action.payload
+    },
+    addRobotStatus(state, action: PayloadAction<number>) {
+      state.users[1].status += action.payload
+    },
   }
 })
 
@@ -67,7 +73,9 @@ export const {
   addUserCheck,
   addDicesAmount,
   addUserStatus,
-  changeHumanThrow
+  changeHumanThrow,
+  addRobotCheck,
+  addRobotStatus,
 } = gameSlice.actions
 
 export default gameSlice.reducer;
