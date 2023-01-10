@@ -29,7 +29,6 @@ export const ButtonBlock: FC = () => {
 
   const dispatch = useAppDispatch();
 
-
   useEffect(() => {
     if (userStatus === 3) {
       dispatch(addUserCheck(-50))
@@ -44,7 +43,6 @@ export const ButtonBlock: FC = () => {
     }
   })
 
-
   const diceThrow = (player:boolean) => {
     const meanings = generateDicesMeanings(dicesAmount)
     dispatch(addDicesMeanings(meanings))
@@ -54,7 +52,6 @@ export const ButtonBlock: FC = () => {
     if (diceCheck > 0) {
       dispatch(addDiceCheck(diceCheck))
       console.log(diceCheck)
-      console.log(diceCheckStore)
     } else {
       dispatch(diceCheckZero())
       player ? dispatch(addUserStatus(1)) : dispatch(addRobotStatus(1))
@@ -63,17 +60,39 @@ export const ButtonBlock: FC = () => {
 
     const amount = filterDicesAmount(meanings, parse)
     dispatch(addDicesAmount(amount))
+    return diceCheck
   }
 
+  const randomInteger = (min:number, max:number):number => {
+    // случайное число от min до (max+1)
+    let rand = min + Math.random() * (max + 1 - min);
+    return Math.floor(rand);
+  }
 
-  const pass = (player:boolean) => {
-    console.log(diceCheckStore)
-    player ? dispatch(addUserCheck(diceCheckStore)) : dispatch(addRobotCheck(diceCheckStore))
+  const playSeries = (diceThrow:any):number=> {
+    let count:number = 0
+    do {
+      const dice:number = diceThrow(humanThrow)
+      count += dice
+      if (!randomInteger(0, 1)) {
+        console.log('stop')
+        return count
+      }
+    } while (count)
+    return count
+  }
+
+  const pass = (player:boolean, diceThrow: number = 0) => {
+    player ? dispatch(addUserCheck(diceCheckStore)) : dispatch(addRobotCheck(diceThrow))
     dispatch(diceCheckZero())
     dispatch(addDicesAmount(5))
     dispatch(changeHumanThrow())
   }
 
+  const robotThrow = () => {
+    console.log('robot pass')
+    pass(humanThrow, playSeries(diceThrow))
+  }
 
   const handleClickPlay = (event: MouseEvent<HTMLElement>) => {
     diceThrow(humanThrow)
@@ -83,16 +102,6 @@ export const ButtonBlock: FC = () => {
     pass(humanThrow)
   }
 
-
-  const robotThrow = () => {
-    console.log('robot throw')
-    diceThrow(humanThrow)
-    console.log('robot throw')
-    console.log('robot pass')
-    pass(humanThrow)
-    console.log('robot pass')
-  }
-
   return (
     <ButtonBlockDiv>
       <PlayButton onClick={handleClickPlay}>Играть</PlayButton>
@@ -100,4 +109,4 @@ export const ButtonBlock: FC = () => {
     </ButtonBlockDiv>
   );
 };
-
+// TODO: если робот получает болт, то ход снова его, почему?
