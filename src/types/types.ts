@@ -6,6 +6,6 @@ export interface IUser {
   status: number;
 }
 
-export interface IcountItems {
+export interface ICountItems {
   [index: number]: number;
 }

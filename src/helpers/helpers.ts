@@ -1,4 +1,4 @@
-import {IcountItems} from "../types/types";
+import {ICountItems} from "../types/types";
 
 export const generateDicesMeanings = (dicesAmount: number): number[] => {
   //Генерируем массив с пятью элементами типа number в количестве 5 штук
@@ -10,23 +10,22 @@ export const generateDicesMeanings = (dicesAmount: number): number[] => {
     const meaning = Math.floor(Math.random() * (max - min)) + min
     meanings.push(meaning)
   }
-  console.log(meanings)
+
   return meanings
 }
 
-export const parseDiceCheck = (meanings: number[] = []): IcountItems => {
+export const parseDiceCheck = (meanings: number[] = []): ICountItems => {
   //Узнаём, сколько раз каждое возможное число выпало на кубиках
-  const countItems: IcountItems = {}
+  const countItems: ICountItems = {}
 
   for (let i = 1; i < 7; i++) {
     countItems[i] = meanings.filter(meaning => meaning === i).length
   }
 
-  console.log(countItems)
   return countItems
 }
 
-export const countingDiceCheck = (countItems: IcountItems): number => {
+export const countingDiceCheck = (countItems: ICountItems): number => {
   //TODO: рефачить по возможности
 
   let counter: number = 0
@@ -71,11 +70,10 @@ export const countingDiceCheck = (countItems: IcountItems): number => {
     }
   }
 
-  console.log(counter)
   return counter
 }
 
-export const filterDicesAmount = (meanings: number[], countItems: IcountItems): number => {
+export const filterDicesAmount = (meanings: number[], countItems: ICountItems): number => {
   //Уменьшаем количество кубиков на количество учитываемых при игре значений
   let amount: number = meanings.length
   const firstAmount: number = amount
@@ -86,7 +84,20 @@ export const filterDicesAmount = (meanings: number[], countItems: IcountItems): 
 
   if (amount === 0 || amount === firstAmount) amount = 5
 
-  console.log(amount)
   return amount
 
+}
+
+export const randomInteger = (min: number, max: number): number => {
+  // случайное число от min до (max+1)
+  let rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
+}
+
+export const sleep = (milliseconds: number) => {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
 }

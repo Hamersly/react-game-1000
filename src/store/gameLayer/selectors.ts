@@ -9,10 +9,12 @@ export const getDicesMeanings = (state: RootState) => gameParams(state).dicesMea
 
 export const getPlayers = createSelector(allParams, (state: RootState) => state.game.users)
 
-export const getWhoseThrow = (state: RootState) => gameParams(state).whoseThrow
+export const getHumanThrow = (state: RootState) => gameParams(state).humanThrow
 
 export const getDiceCheck = (state: RootState) => gameParams(state).diceCheck
 
 export const getDicesAmount = (state: RootState) => gameParams(state).dicesAmount
 
 export const getUserStatus = (state: RootState) => gameParams(state).users[0].status
+
+export const getRobotStatus = (state: RootState) => gameParams(state).users[1].status
