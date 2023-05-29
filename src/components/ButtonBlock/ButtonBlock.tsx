@@ -4,7 +4,9 @@ import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {
   addDiceCheck,
   addDicesAmount,
-  addDicesMeanings, addRobotCheck, addRobotStatus,
+  addDicesMeanings,
+  addRobotCheck,
+  addRobotStatus,
   addUserCheck,
   addUserStatus,
   changeHumanThrow,
@@ -17,7 +19,14 @@ import {
   getRobotStatus,
   getUserStatus
 } from "../../store/gameLayer/selectors";
-import {countingDiceCheck, filterDicesAmount, generateDicesMeanings, parseDiceCheck} from "../../helpers/helpers";
+import {
+  countingDiceCheck,
+  filterDicesAmount,
+  generateDicesMeanings,
+  parseDiceCheck,
+  randomInteger,
+  sleep
+} from "../../helpers/helpers";
 
 
 export const ButtonBlock: FC = () => {
@@ -25,7 +34,7 @@ export const ButtonBlock: FC = () => {
   const dicesAmount: number = useAppSelector(getDicesAmount)
   const userStatus: number = useAppSelector(getUserStatus)
   const robotStatus: number = useAppSelector(getRobotStatus)
-  const humanThrow = useAppSelector(getHumanThrow)
+  const getThrow = useAppSelector(getHumanThrow)
 
   const dispatch = useAppDispatch();
 
@@ -38,12 +47,13 @@ export const ButtonBlock: FC = () => {
       dispatch(addRobotCheck(-50))
       dispatch(addRobotStatus(-3))
     }
-    if (!humanThrow) {
+    if (!getThrow) {
       robotThrow()
     }
   })
 
-  const diceThrow = (player:boolean) => {
+  const diceThrow = (humanThrow: boolean): number => {
+    //Бросок кубиков. Если 0 - переход броска к сопернику, если больше 0 - возвращает выпавшую сумму.
     const meanings = generateDicesMeanings(dicesAmount)
     dispatch(addDicesMeanings(meanings))
     const parse = parseDiceCheck(meanings)
@@ -51,55 +61,54 @@ export const ButtonBlock: FC = () => {
 
     if (diceCheck > 0) {
       dispatch(addDiceCheck(diceCheck))
-      console.log(diceCheck)
     } else {
       dispatch(diceCheckZero())
-      player ? dispatch(addUserStatus(1)) : dispatch(addRobotStatus(1))
-      dispatch(changeHumanThrow())
+      humanThrow ? dispatch(addUserStatus(1)) : dispatch(addRobotStatus(1))
+      dispatch(changeHumanThrow(humanThrow))
     }
+
+    console.log(diceCheck, ' diceThrow() ', humanThrow)
 
     const amount = filterDicesAmount(meanings, parse)
     dispatch(addDicesAmount(amount))
     return diceCheck
   }
 
-  const randomInteger = (min:number, max:number):number => {
-    // случайное число от min до (max+1)
-    let rand = min + Math.random() * (max + 1 - min);
-    return Math.floor(rand);
-  }
 
-  const playSeries = (diceThrow:any):number=> {
-    let count:number = 0
+  const playSeries = (diceThrow: any): number => {
+    //Решение робота о броске, или пасе, на основании генератора случайного числа (1, 0)
+    let count: number = 0
     do {
-      const dice:number = diceThrow(humanThrow)
+      const dice: number = diceThrow(getThrow)
       count += dice
       if (!randomInteger(0, 1)) {
-        console.log('stop')
+        console.log('playSeries() Мне хватит! ', getThrow)
         return count
       }
+      sleep(2000)
     } while (count)
     return count
   }
 
-  const pass = (player:boolean, diceThrow: number = 0) => {
+  const pass = (player: boolean, diceThrow: number = 0) => {
     player ? dispatch(addUserCheck(diceCheckStore)) : dispatch(addRobotCheck(diceThrow))
     dispatch(diceCheckZero())
     dispatch(addDicesAmount(5))
-    dispatch(changeHumanThrow())
+    dispatch(changeHumanThrow(player))
+    console.log('Pass() ', player, ' ', getThrow)
   }
 
   const robotThrow = () => {
-    console.log('robot pass')
-    pass(humanThrow, playSeries(diceThrow))
+    console.log('robotThrow()')
+    pass(getThrow, playSeries(diceThrow))
   }
 
   const handleClickPlay = (event: MouseEvent<HTMLElement>) => {
-    diceThrow(humanThrow)
+    diceThrow(getThrow)
   }
 
   const handleClickPass = (event: MouseEvent<HTMLElement>) => {
-    pass(humanThrow)
+    pass(getThrow)
   }
 
   return (
@@ -109,4 +118,4 @@ export const ButtonBlock: FC = () => {
     </ButtonBlockDiv>
   );
 };
-// TODO: если робот получает болт, то ход снова его, почему?
+// TODO: при броске робота кубики на экране не меняются

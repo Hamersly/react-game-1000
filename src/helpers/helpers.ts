@@ -87,3 +87,17 @@ export const filterDicesAmount = (meanings: number[], countItems: ICountItems): 
   return amount
 
 }
+
+export const randomInteger = (min: number, max: number): number => {
+  // случайное число от min до (max+1)
+  let rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
+}
+
+export const sleep = (milliseconds: number) => {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}

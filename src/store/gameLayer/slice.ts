@@ -54,8 +54,8 @@ const gameSlice = createSlice({
     addUserStatus(state, action: PayloadAction<number>) {
       state.users[0].status += action.payload
     },
-    changeHumanThrow(state) {
-      state.humanThrow = !state.humanThrow
+    changeHumanThrow(state, action: PayloadAction<boolean>) {
+      state.humanThrow = !action.payload
     },
     addRobotCheck(state, action: PayloadAction<number>) {
       state.users[1].userCheck += action.payload
